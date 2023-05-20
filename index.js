@@ -58,18 +58,7 @@ async function run() {
 
 
 
-  // app.get('/toys/:email', async (req, res) => {
-  //   const email = req.params.email;
-  //   const query = { email: email };
-  //   try {
-  //     const result = await toysCollection.findOne(query);
-  //     console.log(result);
-  //     res.send(result);
-  //   } catch (error) {
-  //     console.error('Error fetching toy:', error);
-  //     res.status(500).send('Error fetching toy');
-  //   }
-  // });
+  
 
 
 
