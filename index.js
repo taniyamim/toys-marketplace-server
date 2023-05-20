@@ -30,6 +30,7 @@ async function run() {
     await client.connect();
 
     const toysCollection = client.db('toysMarketplace').collection('toys');
+
     app.get('/toys', async (req, res) => {
         const cursor = toysCollection.find();
         const result = await cursor.toArray();
@@ -52,6 +53,57 @@ async function run() {
       const result = await toysCollection.insertOne(newToy);
       res.send(result);
   })
+
+
+
+
+
+  // app.get('/toys/:email', async (req, res) => {
+  //   const email = req.params.email;
+  //   const query = { email: email }; // Assuming you have an 'email' field in your toy documents
+  //   try {
+  //     const result = await toysCollection.findOne(query);
+  //     console.log(result);
+  //     res.send(result);
+  //   } catch (error) {
+  //     console.error('Error fetching toy:', error);
+  //     res.status(500).send('Error fetching toy');
+  //   }
+  // });
+
+
+
+  app.delete('/toys/:id', async (req, res) => {
+    const id = req.params.id;
+    const query = { _id: new ObjectId(id) }
+    const result = await toysCollection.deleteOne(query);
+    res.send(result);
+})
+
+
+app.put('/toys/:id', async(req, res) => {
+  const id = req.params.id;
+  const filter = {_id: new ObjectId(id)}
+  const options = { upsert: true };
+  const updatedToy = req.body;
+
+  const toy = {
+      $set: {
+          toyName: updatedToy.toyName,
+          availableQuantity: updatedToy.availableQuantity,  
+          sellerName: updatedToy.sellerName, 
+          sellerEmail: updatedToy.sellerEmail, 
+          subCategory: updatedToy.subCategory, 
+          details: updatedToy.details, 
+          price: updatedToy.price, 
+          rating: updatedToy.rating, 
+          picture: updatedToy.picture
+      }
+  }
+
+  const result = await toysCollection.updateOne(filter, toy, options);
+  res.send(result);
+})
 
 
 
